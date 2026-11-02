@@ -23,19 +23,7 @@ The API is not limited to breast cancer, six layers, or age-defined cohorts.
 
 ## Workflow
 
-```mermaid
-flowchart TD
-    A[All supplied molecular features] --> B[Source cohort and target-training cohort]
-    B --> C[Inner target CV: training-only imputation and scaling]
-    C --> D[Source-only elastic-net coefficient anchor]
-    D --> E[Binary LSAT-EN: target logistic likelihood]
-    D --> F[LSAT-Cox-EN: target partial likelihood]
-    E --> G[Tune lambda, alpha, and layer-specific tau]
-    F --> G
-    G --> H[Refit using all target-training data and source anchor]
-    H --> I[Predict untouched target-test patients]
-    H --> J[Inspect coefficients and repeated-fit marker priorities]
-```
+![Binary and Cox LSAT-EN workflow](assets/lsat-workflow.png)
 
 No held-out target test patients participate in `fit()`. Within inner CV,
 validation patients are excluded from preprocessing and source-anchor
@@ -228,21 +216,72 @@ dataset and not a reproduction of the manuscript tables.
 [Cox coefficients](docs/example-output/cox-features.csv) |
 [Selected binary parameters](docs/example-output/binary-best-parameters.json).
 
-## Study Background
+## Manuscript Abstract
 
-Younger breast cancer patients may have distinct tumor biology and fewer
-available outcomes for model development. LSAT-EN was developed to borrow
-information from older source cohorts while adapting associations within
-each omics layer. The manuscript studies age >=60, >=55 and >=50 source
-cohorts and a <50 target cohort, with binary and censored survival outcomes.
-Its reported simulations and TCGA-BRCA results, including the numerical
-summary supplied by the authors, are available in the [study background](docs/background.md).
+**Background:** Younger breast cancer patients (<50 years) often present with
+more aggressive disease and distinct molecular characteristics, yet predictive
+models for this group are underpowered due to small sample sizes. Most existing
+models are built on older populations and may not translate directly,
+particularly across multiple omics data types. To address this, we developed
+Layered Source-Anchored Transfer Elastic Net (LSAT-EN), which adaptively borrows
+from the older source cohort while allowing borrowing strength to vary across
+omics layers according to their similarity between source and target cohorts,
+while performing elastic-net variable selection.
+
+**Methods:** Patients aged >=60, >=55, and >=50 years were used as the source
+to improve prediction in patients aged <50 years. LSAT-EN was evaluated in
+group-correlated simulations and in TCGA-BRCA integrating six omics layers.
+Binary survival at 2-4 years was assessed by AUC; censored survival by Harrell's
+C-index and 2-5-year inverse probability of censoring weighted (IPCW) AUC.
+
+**Results:** In simulation, LSAT-EN achieved the highest AUC under moderate
+source-target heterogeneity ($\sigma_{\mathrm{TL}}^2=0.25$; 0.747-0.802),
+outperforming GAS-EN (0.735-0.767), Overall EN (0.683-0.710), Individual EN
+(0.646-0.767), and glmtrans EN (0.640-0.733) across target-training sample sizes
+($n_T$). Its advantage was greatest under higher source-target heterogeneity
+($\sigma_{\mathrm{TL}}^2=4$), particularly with small $n_T$, where LSAT-EN
+achieved AUCs of 0.689-0.789 compared with 0.590-0.771 across competing methods.
+In TCGA-BRCA data, LSAT-EN improved discrimination relative to Overall and
+Individual EN in all reported binary and Cox models across time horizons and
+source age groups. The method also identified clinically and biologically
+relevant mRNA and miRNA features, as well as candidate miRNA-mRNA pairs,
+supporting its potential for biomarker discovery.
+
+**Conclusion:** LSAT-EN is a transfer-learning method for improving prediction
+for younger breast cancer patients. The framework may support prediction in
+other underrepresented populations with limited target-cohort data to advance
+cancer-disparity machine-learning research.
+
+## Simulation Figure and Settings
 
 ![Manuscript illustration: binary simulations across source-target heterogeneity](assets/manuscript-binary-simulation.png)
 
-This supplied manuscript figure is distinct from the synthetic package
-examples above. Historical screened-panel analyses and the new all-feature
-Python package should not be described as identical pipelines.
+The figure summarizes the manuscript's binary simulation benchmark. Each
+panel varies the source-target coefficient-shift **variance**, not its SD:
+A, 0; B, 0.25; C, 1; D, 4.
+
+| Setting | Value |
+|---|---|
+| Predictors | 500, arranged in 50 correlation blocks of 10 |
+| Source-training patients | 300 |
+| Target-training patients shown | 80, 100, 140, 200 |
+| Independent target-test patients | 250 per simulated dataset |
+| Covariates | Multivariate normal; zero mean and unit marginal variance |
+| Within-block / between-block correlation | 0.50 / 0.05 |
+| Source nonzero coefficients | Three at 1.0, three at 0.7, four at 0.4; remaining 490 zero |
+| Target coefficients | $\beta_T=\beta_S+\delta$, with $\delta_j\sim N(0,\sigma_{\mathrm{TL}}^2)$ |
+| Binary outcomes | Bernoulli with probability $\operatorname{logit}^{-1}(X\beta)$ |
+| Replicate datasets | 20 per target-size/heterogeneity setting |
+| Bars and error bars | Mean test AUC (%) and SE across the 20 replicate datasets |
+| Compared methods | glmtrans EN, Overall EN, Individual EN, GAS-EN, LSAT-EN |
+
+Group-specific borrowing in this saved simulation benchmark used the 50
+correlation blocks, with a tuned global scale multiplying pilot divergence
+weights. For six-omics applications, layers are defined by molecular modality.
+The [figure source data](assets/simulation-data.csv) include the plotted
+estimates; [rendering code](tools/render_simulation.py) preserves their bar
+values and error bars. GAS-EN and glmtrans are benchmark comparators, not
+estimators implemented by this Python package.
 
 ## Documentation and Validation
 
@@ -257,13 +296,8 @@ and predictor retention. Its unanchored ridge cases are compared against
 scikit-learn logistic regression and scikit-survival Cox regression.
 Clinical use requires independent validation and appropriate study oversight.
 
-## Citation and Contact
+## Citation
 
 Wanru Guo, Binbin Wang, and Curtis Tatsuoka. *LSAT-EN: Layered Source-Anchored
 Transfer Elastic Net*. Python software, version 0.1.0 (2026).
-Manuscript DOI will be added when available; no publication identifier is invented.
-Contact: wanru.guo@som.umaryland.edu.
-
-Repository organization takes inspiration from [UniST](https://github.com/lanshui98/UniST).
-No UniST model implementation is used; LSAT-EN is a separate statistical method.
 
