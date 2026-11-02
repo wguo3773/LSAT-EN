@@ -6,15 +6,16 @@ c0 <- list(ink="#20242A",muted="#606A74",line="#34495E",
  sat="#DDEAFB",sat_dark="#315F9B",lsat="#E8E0F5",lsat_dark="#68489B",
  test="#FFF0C2",test_dark="#8A6500",result="#E7F1E2",result_dark="#3E6C35")
 rr <- function(x,y,w,h,fill="white",edge=c0$line,lwd=1.4,r=.012)
- grid.roundrect(x,y,w,h,r=unit(r,"npc"),gp=gpar(fill=fill,col=edge,lwd=lwd))
+ grid.roundrect(x,y,w,h,r=unit(.012,"npc"),gp=gpar(fill=fill,col=NA))
 tx <- function(s,x,y,size=11,color=c0$ink,bold=FALSE,just="centre",italic=FALSE)
  grid.text(s,x,y,just=just,gp=gpar(col=color,fontsize=size,
   fontface=if(bold)"bold" else if(italic)"italic" else "plain",fontfamily="Helvetica"))
 mt <- function(e,x,y,size=11,color=c0$ink)
  grid.text(e,x,y,gp=gpar(col=color,fontsize=size))
 ar <- function(x0,y0,x1,y1,color=c0$line,lwd=2)
- grid.lines(unit(c(x0,x1),"npc"),unit(c(y0,y1),"npc"),
-  arrow=arrow(type="closed",length=unit(.12,"inches")),gp=gpar(col=color,lwd=lwd,lineend="round"))
+ grid.curve(x0,y0,x1,y1,curvature=if(abs(x1-x0)<.001) .22 else -.14,
+  arrow=arrow(type="open",length=unit(.085,"inches")),
+  gp=gpar(col=adjustcolor(color,alpha.f=.75),lwd=lwd*.70,lineend="round"))
 people <- function(x,y,fill,scale=1) {
  dx<-c(-.030,-.010,.010,.030,-.020,0,.020)*scale
  dy<-c(0,.005,.005,0,-.027,-.024,-.027)*scale
@@ -50,7 +51,7 @@ draw <- function() {
   tx(c('Fit source-only logistic EN','Fit source-only Cox EN')[j],center+.04,.656,size=8.5,color=c0$muted)
   if(j==1)mt(expression(hat(beta)[S*g]^bin),center+.04,.625,size=13,color=c0$source_dark)
   else mt(expression(hat(beta)[S*g]^Cox),center+.04,.625,size=13,color=c0$source_dark)
-  ar(center,.600,center,.550,color,1.8)
+  ar(center-.075,.600,center-.075,.550,color,1.8)
   tx('Layer-weighted transfer',center,.577,size=8.5,color=color,italic=TRUE)
   rr(center,.475,.30,.110,'#F7FBFB',c0$target_dark,r=.006)
   people(center-.085,.500,c0$target,.8)
