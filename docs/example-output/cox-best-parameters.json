@@ -1,0 +1,12 @@
+{
+  "lam": 0.05,
+  "alpha": 0.5,
+  "tau": {
+    "mRNA": 0.5,
+    "miRNA": 0.5,
+    "methylation": 0.5,
+    "CNV": 0.5,
+    "protein": 0.5,
+    "mutation": 0.0
+  }
+}
