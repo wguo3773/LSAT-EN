@@ -1,0 +1,6 @@
+include LICENSE CITATION.cff CONTRIBUTING.md
+recursive-include docs *.md *.csv *.json
+recursive-include assets *.png
+recursive-include examples *.py
+recursive-include tests *.py
+

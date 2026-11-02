@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "Please cite the LSAT-EN software version used in your analysis."
+title: "LSAT-EN: Layered Source-Anchored Transfer Elastic Net"
+type: software
+version: 0.1.0
+date-released: 2026-11-02
+authors:
+  - family-names: Guo
+    given-names: Wanru
+    affiliation: University of Maryland, Baltimore
+  - family-names: Wang
+    given-names: Binbin
+    affiliation: University of Maryland, Baltimore
+  - family-names: Tatsuoka
+    given-names: Curtis
+    affiliation: University of Maryland, Baltimore
+repository-code: "https://github.com/wguo3773/LSAT-EN"
+license: MIT
+keywords:
+  - transfer learning
+  - elastic net
+  - multi-omics
+  - survival prediction
+  - biomarker prioritization
+
