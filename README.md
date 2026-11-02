@@ -260,29 +260,6 @@ The figure summarizes the manuscript's binary simulation benchmark. Each
 panel varies the source-target coefficient-shift **variance**, not its SD:
 A, 0; B, 0.25; C, 1; D, 4.
 
-| Setting | Value |
-|---|---|
-| Predictors | 500, arranged in 50 correlation blocks of 10 |
-| Source-training patients | 300 |
-| Target-training patients shown | 80, 100, 140, 200 |
-| Independent target-test patients | 250 per simulated dataset |
-| Covariates | Multivariate normal; zero mean and unit marginal variance |
-| Within-block / between-block correlation | 0.50 / 0.05 |
-| Source nonzero coefficients | Three at 1.0, three at 0.7, four at 0.4; remaining 490 zero |
-| Target coefficients | $\beta_T=\beta_S+\delta$, with $\delta_j\sim N(0,\sigma_{\mathrm{TL}}^2)$ |
-| Binary outcomes | Bernoulli with probability $\operatorname{logit}^{-1}(X\beta)$ |
-| Replicate datasets | 20 per target-size/heterogeneity setting |
-| Bars and error bars | Mean test AUC (%) and SE across the 20 replicate datasets |
-| Compared methods | glmtrans EN, Overall EN, Individual EN, GAS-EN, LSAT-EN |
-
-Group-specific borrowing in this saved simulation benchmark used the 50
-correlation blocks, with a tuned global scale multiplying pilot divergence
-weights. For six-omics applications, layers are defined by molecular modality.
-The [figure source data](assets/simulation-data.csv) include the plotted
-estimates; [rendering code](tools/render_simulation.py) preserves their bar
-values and error bars. GAS-EN and glmtrans are benchmark comparators, not
-estimators implemented by this Python package.
-
 ## Documentation and Validation
 
 - [Tutorial: real input layouts, fitting and prediction](docs/tutorial.md).
