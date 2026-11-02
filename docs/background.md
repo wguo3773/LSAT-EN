@@ -47,9 +47,6 @@ establish fairness or clinical utility.
 ## Package Versus Manuscript Analyses
 
 The public Python package fits **all supplied predictors without SIS or
-feature-budget selection**, as specified by the developers. Historical
-manuscript analyses included screened panels and other implementations.
-The attached simulation figure is a manuscript illustration, not evidence of
-bit-for-bit numerical reproduction by this Python release. GAS-EN and glmtrans
-are manuscript comparators, not implemented estimators in this package.
+feature-budget selection**. GAS-EN and glmtrans are manuscript comparators,
+not implemented estimators in this package.
 
