@@ -13,7 +13,7 @@ tx <- function(s,x,y,size=11,color=c0$ink,bold=FALSE,just="centre",italic=FALSE)
 mt <- function(e,x,y,size=11,color=c0$ink)
  grid.text(e,x,y,gp=gpar(col=color,fontsize=size))
 ar <- function(x0,y0,x1,y1,color=c0$line,lwd=2)
- grid.curve(x0,y0,x1,y1,curvature=if(abs(x1-x0)<.001) .22 else -.14,
+ grid.lines(unit(c(x0,x1),'npc'),unit(c(y0,y1),'npc'),
   arrow=arrow(type="open",length=unit(.085,"inches")),
   gp=gpar(col=adjustcolor(color,alpha.f=.75),lwd=lwd*.70,lineend="round"))
 people <- function(x,y,fill,scale=1) {
@@ -28,7 +28,10 @@ people <- function(x,y,fill,scale=1) {
 
 draw <- function() {
  grid.newpage()
- tx('Fig 1. Binary and Cox layer-specific source-anchored transfer learning',.5,.975,size=18,bold=TRUE)
+ grid.text('Fig 1. Binary and Cox layer-specific source-anchored transfer learning',
+  .5,.975,gp=gpar(fontfamily='Times',fontface='bold',fontsize=18,col=c0$ink))
+ grid.lines(c(.465,.5),c(.956,.956),gp=gpar(col=c0$sat_dark,lwd=1.3))
+ grid.lines(c(.5,.535),c(.956,.956),gp=gpar(col=c0$lsat_dark,lwd=1.3))
  tx('Older source age cutoffs: 60 / 55 / 50 years; target <50 years | 70% target-training, 30% target-test',
     .5,.944,size=10.5,color=c0$muted)
  for(j in 1:2) {
